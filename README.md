@@ -1,11 +1,11 @@
-# 💍 Wedding Planner (PHP MVC Project)
+# Wedding Planner (PHP MVC Project)
 
 A simple **Wedding Planning Website** built using **PHP**, **MySQL**, and the **MVC (Model–View–Controller)** architecture.
 Users can **sign up**, **log in**, and **log out** securely. This project is designed to demonstrate a clean separation of concerns between logic, data, and presentation layers.
 
 ---
 
-## 🚀 Features
+## Features
 
 * Secure **user registration and login**
 * **Session management** for authenticated users
@@ -15,7 +15,7 @@ Users can **sign up**, **log in**, and **log out** securely. This project is des
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 WeddingPlanner/
@@ -41,7 +41,7 @@ WeddingPlanner/
 
 ---
 
-## ⚙️ Setup Instructions (MAMP)
+## Setup Instructions (MAMP)
 
 1. Copy the project folder to:
 
@@ -64,7 +64,7 @@ WeddingPlanner/
 
 ---
 
-## 🔑 Demo Credentials
+## Demo Credentials
 
 | Username                              | Password |
 | ------------------------------------- | -------- |
@@ -74,7 +74,7 @@ You can also register your own account using the **Sign Up** page.
 
 ---
 
-## 🧩 Future Improvements
+## Future Improvements
 
 * Include cookies/session
 * Enhance UI/UX
