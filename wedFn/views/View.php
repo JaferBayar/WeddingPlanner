@@ -925,6 +925,9 @@ body{margin:0;font-family:Inter,sans-serif;background:<?=$bg?>}
 <div class="header">
     <div class="brand">Dashboard</div>
     <div style="display:flex;gap:10px">
+        <?php if(isSuperAdmin()): ?>
+        <a href="manage_users.php"><button class="btn">Manage Users</button></a>
+        <?php endif; ?>
         <a href="manage_items.php"><button class="btn">Manage Items</button></a>
         <a href="index.php"><button class="btn">Home</button></a>
         <a href="logout.php"><button class="btn">Logout</button></a>
@@ -1250,6 +1253,166 @@ body{margin:0;font-family:"Cormorant Garamond",serif;background:linear-gradient(
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+</body>
+</html>
+<?php
+return ob_get_clean();
+}
+
+function getManageUsersPage($users, $message = '', $error = ''){
+$btn = palette_btn_bg();
+$theme = theme_class();
+$accent = $theme === 'bride' ? '#d4849a' : '#6b7fd4';
+$dir = getDir();
+$isRTL = isRTL();
+$lang = getCurrentLang();
+ob_start();
+?>
+<!DOCTYPE html>
+<html lang="<?=$lang?>" dir="<?=$dir?>">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title><?=t('user_management')?> - <?=t('site_name')?></title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<?php if($isRTL): ?>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<?php endif; ?>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:<?=$isRTL ? '"Tajawal", sans-serif' : '"Cormorant Garamond", serif'?>;background:<?=$theme === 'bride' ? '#ffe6f2' : '#e8f0ff'?>;<?=$isRTL ? 'direction:rtl;text-align:right;' : ''?>}
+.container{max-width:1200px;margin:0 auto;padding:40px 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);box-shadow:0 2px 20px rgba(0,0,0,0.06);margin-bottom:32px;border-radius:16px}
+.brand{font-weight:400;font-size:26px;font-family:"Great Vibes",cursive;color:<?=$accent?>;text-decoration:none}
+.btn{border:none;padding:10px 18px;border-radius:999px;cursor:pointer;background:<?=$btn?>;color:#fff;font-weight:600;font-size:14px;text-decoration:none;display:inline-block;transition:0.3s}
+.btn:hover{opacity:0.9;transform:translateY(-2px)}
+.btn-secondary{background:#fff;color:#666;border:2px solid #e0e0e0}
+.btn-secondary:hover{border-color:<?=$accent?>}
+.page-header{margin-bottom:32px}
+.page-title{font-family:"Playfair Display",serif;font-size:36px;margin-bottom:8px;color:#333}
+.page-subtitle{opacity:0.7;font-size:16px}
+.message{padding:14px 20px;border-radius:12px;margin-bottom:20px;font-size:14px}
+.message.success{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+.message.error{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+.users-table-container{background:#fff;border-radius:20px;box-shadow:0 8px 30px rgba(0,0,0,0.08);overflow:hidden}
+.users-table{width:100%;border-collapse:collapse}
+.users-table thead{background:linear-gradient(135deg, <?=$accent?>, #6b7fd4)}
+.users-table th{padding:18px 20px;text-align:<?=$isRTL?'right':'left'?>;font-size:14px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:0.5px}
+.users-table td{padding:16px 20px;border-bottom:1px solid #f0f0f0;font-size:15px}
+.users-table tbody tr:hover{background:#fafafa}
+.role-badge{display:inline-block;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600}
+.role-super-admin{background:#ffd700;color:#856404}
+.role-admin{background:#d4849a;color:#fff}
+.role-user{background:#e0e0e0;color:#666}
+.action-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.btn-small{padding:6px 12px;font-size:12px;border-radius:8px}
+.btn-promote{background:#28a745;color:#fff}
+.btn-demote{background:#ffc107;color:#333}
+.btn-delete{background:#dc3545;color:#fff}
+.user-info{display:flex;flex-direction:column;gap:4px}
+.username{font-weight:600;color:#333}
+.email{font-size:13px;color:#999}
+.current-user{background:#fff3cd !important}
+@media(max-width:768px){.users-table{font-size:13px}.users-table th,.users-table td{padding:12px 10px}}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="top">
+        <a href="index.php" class="brand"><?=t('site_name')?></a>
+        <div style="display:flex;gap:10px">
+            <a href="dashboard.php" class="btn btn-secondary"><?=t('dashboard')?></a>
+            <a href="manage_items.php" class="btn btn-secondary"><?=t('manage_items')?></a>
+            <a href="index.php" class="btn"><?=t('home')?></a>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <h1 class="page-title"><?=t('user_management')?></h1>
+        <p class="page-subtitle"><?=t('all_users')?> (<?=count($users)?>)</p>
+    </div>
+
+    <?php if($message): ?>
+    <div class="message success"><?=$message?></div>
+    <?php endif; ?>
+
+    <?php if($error): ?>
+    <div class="message error"><?=$error?></div>
+    <?php endif; ?>
+
+    <div class="users-table-container">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th><?=t('username')?></th>
+                    <th><?=t('email')?></th>
+                    <th><?=t('role')?></th>
+                    <th><?=t('created')?></th>
+                    <th><?=t('actions')?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($users as $user): 
+                    $isSelf = $user['id'] == $_SESSION['user_id'];
+                    $rowClass = $isSelf ? 'current-user' : '';
+                ?>
+                <tr class="<?=$rowClass?>">
+                    <td><?=$user['id']?></td>
+                    <td>
+                        <div class="user-info">
+                            <span class="username"><?=htmlspecialchars($user['username'])?></span>
+                            <?php if($isSelf): ?>
+                            <span class="email" style="color:#28a745;font-weight:600">(<?=t('you')?>)</span>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                    <td><?=htmlspecialchars($user['email'])?></td>
+                    <td>
+                        <?php 
+                        $roleClass = 'role-' . str_replace('_', '-', $user['role']);
+                        $roleText = t($user['role'] . '_role');
+                        ?>
+                        <span class="role-badge <?=$roleClass?>"><?=$roleText?></span>
+                    </td>
+                    <td><?=date('M d, Y', strtotime($user['created_at']))?></td>
+                    <td>
+                        <?php if(!$isSelf): ?>
+                        <div class="action-buttons">
+                            <?php if($user['role'] === 'user'): ?>
+                            <form method="post" style="display:inline">
+                                <input type="hidden" name="action" value="promote">
+                                <input type="hidden" name="user_id" value="<?=$user['id']?>">
+                                <button type="submit" class="btn btn-small btn-promote"><?=t('promote_to_admin')?></button>
+                            </form>
+                            <?php endif; ?>
+                            
+                            <?php if($user['role'] === 'admin'): ?>
+                            <form method="post" style="display:inline">
+                                <input type="hidden" name="action" value="demote">
+                                <input type="hidden" name="user_id" value="<?=$user['id']?>">
+                                <button type="submit" class="btn btn-small btn-demote"><?=t('demote_to_user')?></button>
+                            </form>
+                            <?php endif; ?>
+                            
+                            <?php if($user['role'] !== 'super_admin'): ?>
+                            <form method="post" style="display:inline" onsubmit="return confirm('<?=t('confirm_delete_user')?>')">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="user_id" value="<?=$user['id']?>">
+                                <button type="submit" class="btn btn-small btn-delete"><?=t('delete_user')?></button>
+                            </form>
+                            <?php endif; ?>
+                        </div>
+                        <?php else: ?>
+                        <span style="color:#999;font-size:13px"><?=t('you_cannot_modify_yourself')?></span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>

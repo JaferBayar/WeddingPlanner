@@ -220,3 +220,65 @@ function getOrderItems($orderId){
     $stmt->close();
     return $out;
 }
+
+// User Management Functions
+function getAllUsers(){
+    require __DIR__ . '/../database.php';
+    $out = [];
+    $stmt = $conn->prepare("SELECT id, username, email, role, created_at FROM users ORDER BY 
+        CASE role 
+            WHEN 'super_admin' THEN 1 
+            WHEN 'admin' THEN 2 
+            WHEN 'user' THEN 3 
+        END, created_at ASC");
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while($r = $res->fetch_assoc()){ 
+        $out[] = $r; 
+    }
+    $stmt->close();
+    return $out;
+}
+
+function updateUserRole($userId, $newRole){
+    require __DIR__ . '/../database.php';
+    // Validate role
+    if(!in_array($newRole, ['user', 'admin', 'super_admin'])){
+        return false;
+    }
+    $stmt = $conn->prepare("UPDATE users SET role = ? WHERE id = ?");
+    $stmt->bind_param("si", $newRole, $userId);
+    $stmt->execute();
+    $stmt->close();
+    return true;
+}
+
+function deleteUser($userId){
+    require __DIR__ . '/../database.php';
+    // Don't allow deleting the last super admin
+    $checkStmt = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE role = 'super_admin'");
+    $checkStmt->execute();
+    $checkRes = $checkStmt->get_result();
+    $checkRow = $checkRes->fetch_assoc();
+    $superAdminCount = intval($checkRow['count']);
+    $checkStmt->close();
+    
+    // Check if this user is a super admin
+    $userStmt = $conn->prepare("SELECT role FROM users WHERE id = ?");
+    $userStmt->bind_param("i", $userId);
+    $userStmt->execute();
+    $userRes = $userStmt->get_result();
+    $userRow = $userRes->fetch_assoc();
+    $userStmt->close();
+    
+    // If trying to delete the last super admin, don't allow it
+    if($userRow && $userRow['role'] === 'super_admin' && $superAdminCount <= 1){
+        return false; // Cannot delete last super admin
+    }
+    
+    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $stmt->close();
+    return true;
+}
