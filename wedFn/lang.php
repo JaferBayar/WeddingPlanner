@@ -16,6 +16,7 @@ $translations = [
         'delete' => 'Delete',
         'edit' => 'Edit',
         'add' => 'Add',
+        'remove' => 'Remove',
         'actions' => 'Actions',
         'yes' => 'Yes',
         'no' => 'No',
@@ -48,13 +49,13 @@ $translations = [
         'service_decor' => 'Décor & Florals',
         'service_decor_desc' => 'Transform your venue with stunning decorations and beautiful floral arrangements.',
         'service_entertainment' => 'Entertainment',
-        'service_entertainment_desc' => 'From live bands to DJs, we\'ll help you create the perfect atmosphere for celebration.',
-        'service_print' => 'Invitations & Print',
-        'service_print_desc' => 'Beautiful custom invitations, programs, and stationery to match your wedding theme.',
+        'service_entertainment_desc' => 'From live bands to DJs, we\'ll help you create the perfect atmosphere.',
+        'service_print' => 'Invitations & Stationery',
+        'service_print_desc' => 'Custom invitations and stationery that match your wedding theme perfectly.',
         
         // CTA Section
         'ready_to_begin' => 'Ready to Begin?',
-        'cta_subtitle' => 'Start planning your perfect wedding today. Create an account or explore as a guest.',
+        'cta_subtitle' => 'Join hundreds of happy couples who trusted us with their special day',
         'create_account' => 'Create Account',
         'continue_guest' => 'Continue as Guest',
         'guest_mode' => 'Guest Mode',
@@ -148,28 +149,21 @@ $translations = [
         'category' => 'Category',
         'icon' => 'Icon',
         'select_category' => 'Select category...',
-        'is_bundle' => 'This is a bundle/package',
-        'update_item' => 'Update Item',
-        'add_item' => 'Add Item',
-        'all_items' => 'All Items',
-        'item_added' => 'Item added successfully!',
-        'item_updated' => 'Item updated successfully!',
-        'item_deleted' => 'Item deleted successfully!',
-        'no_items' => 'No items yet. Add your first item!',
-        'confirm_delete' => 'Delete this item?',
-        'select_emoji' => 'Select below or paste emoji',
+        'is_bundle' => 'Is Bundle?',
+        'item_added' => 'Item added successfully',
+        'item_updated' => 'Item updated successfully',
+        'item_deleted' => 'Item deleted successfully',
+        'select_icon' => 'Select an icon',
         
         // Theme
-        'groom' => 'Groom',
         'bride' => 'Bride',
-        
-        // Footer
-        'copyright' => '© Wedding Planner. Making dreams come true.',
+        'groom' => 'Groom',
+        'copyright' => '© 2024 Wedding Planner. Making dreams come true.',
     ],
     
     'ar' => [
         // General
-        'site_name' => 'منظم الأعراس',
+        'site_name' => 'مخطط الزفاف',
         'home' => 'الرئيسية',
         'dashboard' => 'لوحة التحكم',
         'login' => 'تسجيل الدخول',
@@ -182,15 +176,16 @@ $translations = [
         'delete' => 'حذف',
         'edit' => 'تعديل',
         'add' => 'إضافة',
+        'remove' => 'إزالة',
         'actions' => 'الإجراءات',
         'yes' => 'نعم',
         'no' => 'لا',
         
         // Hero Page
-        'hero_badge' => 'تخطيط ذكي للأعراس',
-        'hero_title' => 'هنا تبدأ الأبدية',
-        'hero_subtitle' => 'خطط لحفل زفافك بأناقة وسهولة',
-        'hero_description' => 'من القاعات الفاخرة إلى الضيافة الراقية، والتصوير الاحترافي والديكورات الجميلة — نجمع كل ما تحتاجه لإنشاء احتفال مثالي بقصة حبكما.',
+        'hero_badge' => 'تخطيط ذكي لحفلات الزفاف',
+        'hero_title' => 'الأبدية تبدأ هنا',
+        'hero_subtitle' => 'خطط لزفاف أحلامك بأناقة وسهولة',
+        'hero_description' => 'من القاعات المذهلة إلى الضيافة الفاخرة، والتصوير الاحترافي إلى الديكورات الجميلة — نجمع لك كل ما تحتاجه لإنشاء احتفال مثالي بقصة حبك.',
         'hero_feature_1' => 'موردون مختارون',
         'hero_feature_2' => 'باقات مخصصة',
         'hero_feature_3' => 'حجز سهل',
@@ -220,9 +215,9 @@ $translations = [
         
         // CTA Section
         'ready_to_begin' => 'هل أنت مستعد للبدء؟',
-        'cta_subtitle' => 'ابدأ التخطيط لحفل زفافك المثالي اليوم. أنشئ حساباً أو تصفح كضيف.',
+        'cta_subtitle' => 'انضم إلى مئات الأزواج السعداء الذين وثقوا بنا في يومهم المميز',
         'create_account' => 'إنشاء حساب',
-        'continue_guest' => 'المتابعة كضيف',
+        'continue_guest' => 'متابعة كضيف',
         'guest_mode' => 'وضع الضيف',
         
         // Login/Signup
@@ -251,16 +246,16 @@ $translations = [
         
         // Categories
         'cat_services' => 'الخدمات',
-        'cat_services_desc' => 'أساسيات لاستقبال ضيوفك وبدء الاحتفال.',
+        'cat_services_desc' => 'الأساسيات لاستقبال ضيوفك وبدء الاحتفال.',
         'cat_decor' => 'الديكور',
-        'cat_decor_desc' => 'التصميم والتفاصيل لتحويل القاعة إلى مكان أحلامك.',
+        'cat_decor_desc' => 'التنسيق والتفاصيل لتحويل القاعة إلى مكانك المثالي.',
         'cat_food' => 'الطعام',
         'cat_food_desc' => 'قوائم طعام مختارة لإسعاد كل طاولة.',
         'cat_photo' => 'التصوير',
         'cat_video' => 'الفيديو',
         'cat_photo_video_desc' => 'التقط كل لحظة بتغطية احترافية.',
         'cat_print' => 'المطبوعات',
-        'cat_print_desc' => 'دعوات وبطاقات طاولات مطبوعة لتتناسب مع ثيمك.',
+        'cat_print_desc' => 'دعوات وبطاقات الطاولات والمزيد مطبوعة لتتناسب مع الثيم.',
         'cat_default_desc' => 'خيارات مختارة بعناية ليوم زفافك.',
         
         // Cart
@@ -270,35 +265,35 @@ $translations = [
         'place_order' => 'إتمام الطلب',
         'your_name' => 'اسمك',
         'your_email' => 'بريدك الإلكتروني',
-        'order_success' => 'تم تقديم طلبك بنجاح.',
+        'order_success' => 'تم إتمام طلبك بنجاح.',
         'order_empty' => 'سلتك فارغة.',
-        'guest_order_error' => 'لا يمكن للضيوف تقديم الطلبات.',
+        'guest_order_error' => 'لا يمكن للضيوف إتمام الطلبات.',
         'please_login' => 'يرجى',
         'or' => 'أو',
-        'to_place_orders' => 'لتقديم الطلبات.',
+        'to_place_orders' => 'لإتمام الطلبات.',
         
         // My Orders
         'my_orders' => 'طلباتي',
-        'order_history' => 'عرض سجل طلباتك وتفاصيلها',
-        'order' => 'طلب',
+        'order_history' => 'عرض سجل طلباتك والتفاصيل',
+        'order' => 'الطلب',
         'order_date' => 'التاريخ',
         'completed' => 'مكتمل',
         'qty' => 'الكمية',
         'no_orders' => 'لا توجد طلبات بعد',
-        'no_orders_desc' => 'لم تقم بأي طلبات بعد. ابدأ التخطيط لحفل زفافك المثالي!',
+        'no_orders_desc' => 'لم تقم بأي طلبات بعد. ابدأ في التخطيط لزفافك المثالي!',
         'browse_services' => 'تصفح الخدمات',
         
         // Dashboard
         'overview' => 'نظرة عامة',
         'users' => 'المستخدمون',
-        'admins' => 'المشرفون',
-        'super_admins' => 'المشرفون الرئيسيون',
+        'admins' => 'المسؤولون',
+        'super_admins' => 'المسؤولون الرئيسيون',
         'services' => 'الخدمات',
         'bundles' => 'الباقات',
         'orders' => 'الطلبات',
         'revenue' => 'الإيرادات',
         'recent_orders' => 'الطلبات الأخيرة',
-        'id' => 'الرقم',
+        'id' => 'المعرف',
         'name' => 'الاسم',
         'email' => 'البريد',
         'date' => 'التاريخ',
@@ -306,7 +301,7 @@ $translations = [
         
         // Manage Items
         'manage_items' => 'إدارة العناصر',
-        'manage_items_desc' => 'إضافة أو تعديل أو حذف الخدمات والباقات',
+        'manage_items_desc' => 'إضافة أو تعديل أو إزالة الخدمات والباقات',
         'add_new_item' => 'إضافة عنصر جديد',
         'edit_item' => 'تعديل العنصر',
         'title' => 'العنوان',
@@ -314,28 +309,21 @@ $translations = [
         'category' => 'الفئة',
         'icon' => 'الأيقونة',
         'select_category' => 'اختر الفئة...',
-        'is_bundle' => 'هذا باقة/حزمة',
-        'update_item' => 'تحديث العنصر',
-        'add_item' => 'إضافة العنصر',
-        'all_items' => 'جميع العناصر',
-        'item_added' => 'تمت إضافة العنصر بنجاح!',
-        'item_updated' => 'تم تحديث العنصر بنجاح!',
-        'item_deleted' => 'تم حذف العنصر بنجاح!',
-        'no_items' => 'لا توجد عناصر بعد. أضف عنصرك الأول!',
-        'confirm_delete' => 'حذف هذا العنصر؟',
-        'select_emoji' => 'اختر أدناه أو الصق رمز تعبيري',
+        'is_bundle' => 'هل هي باقة؟',
+        'item_added' => 'تمت إضافة العنصر بنجاح',
+        'item_updated' => 'تم تحديث العنصر بنجاح',
+        'item_deleted' => 'تم حذف العنصر بنجاح',
+        'select_icon' => 'اختر أيقونة',
         
         // Theme
-        'groom' => 'عريس',
-        'bride' => 'عروس',
-        
-        // Footer
-        'copyright' => '© منظم الأعراس. نحقق الأحلام.',
+        'bride' => 'العروس',
+        'groom' => 'العريس',
+        'copyright' => '© 2024 مخطط الزفاف. نحقق الأحلام.',
     ]
 ];
 
 function getCurrentLang(){
-    return isset($_COOKIE['lang']) ? $_COOKIE['lang'] : 'en';
+    return isset($_COOKIE['wedding_lang']) ? $_COOKIE['wedding_lang'] : 'en';
 }
 
 function isRTL(){
@@ -345,14 +333,7 @@ function isRTL(){
 function t($key){
     global $translations;
     $lang = getCurrentLang();
-    if(isset($translations[$lang][$key])){
-        return $translations[$lang][$key];
-    }
-    // Fallback to English
-    if(isset($translations['en'][$key])){
-        return $translations['en'][$key];
-    }
-    return $key;
+    return $translations[$lang][$key] ?? $key;
 }
 
 function getDir(){

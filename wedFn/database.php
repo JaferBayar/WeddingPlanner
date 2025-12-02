@@ -49,6 +49,7 @@ $conn->query("CREATE TABLE IF NOT EXISTS items(
   price DECIMAL(10,2) NOT NULL,
   category VARCHAR(50) NOT NULL,
   icon VARCHAR(10) DEFAULT '🎁',
+  description TEXT,
   is_bundle TINYINT(1) DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
@@ -57,15 +58,50 @@ $conn->query("CREATE TABLE IF NOT EXISTS items(
 $check = $conn->query("SELECT COUNT(*) as c FROM items");
 $row = $check->fetch_assoc();
 if(intval($row['c']) === 0){
-    $conn->query("INSERT INTO items(title,price,category,icon,is_bundle) VALUES
-        ('Welcome Set',150,'Services','💐',0),
-        ('Hall Design',300,'Decor','🏛️',0),
-        ('Wedding Cake',120,'Food','🍰',0),
-        ('Photography',250,'Photo','📸',0),
-        ('Videography',350,'Video','🎥',0),
-        ('Printables',80,'Print','📝',0),
-        ('Classic Hall & Dinner',2400,'Bundle','💒',1),
-        ('Premium Hall + Photo',4100,'Bundle','💍',1),
-        ('All-Inclusive Celebration',5600,'Bundle','🎊',1)
+    $conn->query("INSERT INTO items(title,price,category,icon,description,is_bundle) VALUES
+        ('Grand Ballroom',1200,'Services','🏰','Luxurious 500-guest capacity hall with crystal chandeliers and marble floors',0),
+        ('Garden Venue',800,'Services','🌸','Beautiful outdoor garden space, fits 300 guests with natural scenery',0),
+        ('Rooftop Terrace',950,'Services','🌆','Modern rooftop venue with city views, capacity for 250 guests',0),
+        ('Beachside Pavilion',1100,'Services','🏖️','Stunning beach location with ocean views, accommodates 200 guests',0),
+        ('Classic Banquet Hall',700,'Services','🎭','Traditional elegant hall, perfect for 400 guests',0),
+        
+        ('Floral Arch',350,'Decor','🌺','Gorgeous floral archway with roses and seasonal flowers',0),
+        ('Crystal Centerpieces',450,'Decor','💎','Set of 25 sparkling crystal centerpieces with LED lighting',0),
+        ('Elegant Draping',280,'Decor','🎀','Luxurious fabric draping for walls and ceiling',0),
+        ('Chair Covers & Sashes',200,'Decor','💺','Complete set for 300 chairs with satin sashes',0),
+        ('LED Uplighting',320,'Decor','💡','Professional LED uplighting package, 20 fixtures',0),
+        ('Backdrop Design',420,'Decor','🎨','Custom photo backdrop with floral and lighting elements',0),
+        
+        ('Gourmet Buffet',45,'Food','🍽️','Per person - Premium buffet with international cuisine',0),
+        ('Plated Dinner',65,'Food','🥘','Per person - 3-course fine dining experience',0),
+        ('Wedding Cake - 3 Tier',380,'Food','🎂','Elegant 3-tier cake serves 100, custom design',0),
+        ('Wedding Cake - 5 Tier',680,'Food','🍰','Spectacular 5-tier cake serves 200, premium design',0),
+        ('Appetizer Station',25,'Food','🥗','Per person - Variety of hot and cold appetizers',0),
+        ('Chocolate Fountain',280,'Food','🍫','Large chocolate fountain with fruits and treats',0),
+        ('Coffee & Dessert Bar',18,'Food','☕','Per person - Specialty coffee and dessert selection',0),
+        
+        ('Full Day Photography',850,'Photo','📸','8 hours coverage, 2 photographers, 500+ edited photos',0),
+        ('Half Day Photography',550,'Photo','📷','4 hours coverage, 1 photographer, 250+ edited photos',0),
+        ('Drone Photography',350,'Photo','🚁','Aerial shots and video, 2 hours coverage',0),
+        ('Photo Booth',420,'Photo','📹','4 hours with props, unlimited prints and digital copies',0),
+        ('Engagement Shoot',380,'Photo','💑','2-hour pre-wedding photoshoot at location of choice',0),
+        
+        ('Cinematic Video',1200,'Video','🎬','Full day coverage with cinematic editing, 15-20 min highlight',0),
+        ('Documentary Video',950,'Video','🎥','Full ceremony and reception coverage, 30-40 min video',0),
+        ('Highlight Reel',450,'Video','📽️','3-5 minute highlight video with music',0),
+        ('Live Streaming',380,'Video','📡','Professional live stream to 500 viewers',0),
+        
+        ('Invitation Suite',8,'Print','💌','Per set - Save the date, invitation, RSVP card',0),
+        ('Thank You Cards',4,'Print','🙏','Per card - Premium thank you cards with envelopes',0),
+        ('Menu Cards',6,'Print','📋','Per card - Elegant menu design for guest tables',0),
+        ('Table Numbers',45,'Print','🔢','Complete set for 30 tables with holders',0),
+        ('Ceremony Programs',3,'Print','📄','Per program - Order of ceremony booklets',0),
+        ('Welcome Sign',120,'Print','🪧','Large custom welcome sign with easel',0),
+        
+        ('Diamond Package',5800,'Bundle','💎','Grand Ballroom + Full Photography & Video + Gourmet buffet for 200 guests',1),
+        ('Golden Package',4200,'Bundle','👑','Garden Venue + Photography + Plated dinner for 150 guests',1),
+        ('Silver Package',3100,'Bundle','🥈','Banquet Hall + Half-day photography + Buffet for 100 guests',1),
+        ('Beach Romance',4800,'Bundle','🌊','Beachside Pavilion + Full video + Photography + Reception for 150',1),
+        ('Garden Dream',3800,'Bundle','🌹','Garden Venue + Decor package + Photography + Dinner for 150',1)
     ");
 }

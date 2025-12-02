@@ -25,10 +25,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $price = floatval($_POST['price']);
         $category = trim($_POST['category']);
         $icon = trim($_POST['icon']);
+        $description = trim($_POST['description']);
         $isBundle = isset($_POST['is_bundle']) ? 1 : 0;
         
         if($title && $price > 0 && $category){
-            addItem($title, $price, $category, $icon, $isBundle);
+            addItem($title, $price, $category, $icon, $description, $isBundle);
             $message = 'Item added successfully!';
         }
     }
@@ -39,10 +40,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $price = floatval($_POST['price']);
         $category = trim($_POST['category']);
         $icon = trim($_POST['icon']);
+        $description = trim($_POST['description']);
         $isBundle = isset($_POST['is_bundle']) ? 1 : 0;
         
         if($id && $title && $price > 0 && $category){
-            updateItem($id, $title, $price, $category, $icon, $isBundle);
+            updateItem($id, $title, $price, $category, $icon, $description, $isBundle);
             $message = 'Item updated successfully!';
         }
     }

@@ -4,7 +4,7 @@ if(session_status()===PHP_SESSION_NONE) session_start();
 function getItemsData(){
     require __DIR__ . '/../database.php';
     $out = [];
-    $res = $conn->query("SELECT id, title, price, category, icon FROM items WHERE is_bundle = 0 ORDER BY id ASC");
+    $res = $conn->query("SELECT id, title, price, category, icon, description FROM items WHERE is_bundle = 0 ORDER BY category ASC, id ASC");
     if($res){ 
         while($r = $res->fetch_assoc()){ 
             $out[] = [
@@ -12,7 +12,8 @@ function getItemsData(){
                 'title' => $r['title'],
                 'price' => floatval($r['price']),
                 'category' => $r['category'],
-                'icon' => $r['icon']
+                'icon' => $r['icon'],
+                'description' => $r['description']
             ];
         } 
     }
@@ -22,7 +23,7 @@ function getItemsData(){
 function getBundlesData(){
     require __DIR__ . '/../database.php';
     $out = [];
-    $res = $conn->query("SELECT id, title, price, category, icon FROM items WHERE is_bundle = 1 ORDER BY id ASC");
+    $res = $conn->query("SELECT id, title, price, category, icon, description FROM items WHERE is_bundle = 1 ORDER BY id ASC");
     if($res){ 
         while($r = $res->fetch_assoc()){ 
             $out[] = [
@@ -30,7 +31,8 @@ function getBundlesData(){
                 'title' => $r['title'],
                 'price' => floatval($r['price']),
                 'category' => $r['category'],
-                'icon' => $r['icon']
+                'icon' => $r['icon'],
+                'description' => $r['description']
             ];
         } 
     }
@@ -40,7 +42,7 @@ function getBundlesData(){
 function getAllItems(){
     require __DIR__ . '/../database.php';
     $out = [];
-    $res = $conn->query("SELECT id, title, price, category, icon, is_bundle, created_at FROM items ORDER BY is_bundle ASC, id ASC");
+    $res = $conn->query("SELECT id, title, price, category, icon, description, is_bundle, created_at FROM items ORDER BY is_bundle ASC, id ASC");
     if($res){ 
         while($r = $res->fetch_assoc()){ 
             $out[] = $r;
@@ -49,20 +51,20 @@ function getAllItems(){
     return $out;
 }
 
-function addItem($title, $price, $category, $icon, $isBundle = 0){
+function addItem($title, $price, $category, $icon, $description = '', $isBundle = 0){
     require __DIR__ . '/../database.php';
-    $stmt = $conn->prepare("INSERT INTO items(title, price, category, icon, is_bundle) VALUES(?,?,?,?,?)");
-    $stmt->bind_param("sdssi", $title, $price, $category, $icon, $isBundle);
+    $stmt = $conn->prepare("INSERT INTO items(title, price, category, icon, description, is_bundle) VALUES(?,?,?,?,?,?)");
+    $stmt->bind_param("sdsssi", $title, $price, $category, $icon, $description, $isBundle);
     $stmt->execute();
     $id = $stmt->insert_id;
     $stmt->close();
     return $id;
 }
 
-function updateItem($id, $title, $price, $category, $icon, $isBundle){
+function updateItem($id, $title, $price, $category, $icon, $description, $isBundle){
     require __DIR__ . '/../database.php';
-    $stmt = $conn->prepare("UPDATE items SET title=?, price=?, category=?, icon=?, is_bundle=? WHERE id=?");
-    $stmt->bind_param("sdssii", $title, $price, $category, $icon, $isBundle, $id);
+    $stmt = $conn->prepare("UPDATE items SET title=?, price=?, category=?, icon=?, description=?, is_bundle=? WHERE id=?");
+    $stmt->bind_param("sdsssii", $title, $price, $category, $icon, $description, $isBundle, $id);
     $stmt->execute();
     $stmt->close();
 }
@@ -77,7 +79,7 @@ function deleteItem($id){
 
 function getItemById($id){
     require __DIR__ . '/../database.php';
-    $stmt = $conn->prepare("SELECT id, title, price, category, icon, is_bundle FROM items WHERE id=?");
+    $stmt = $conn->prepare("SELECT id, title, price, category, icon, description, is_bundle FROM items WHERE id=?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $res = $stmt->get_result();
@@ -124,8 +126,14 @@ function getCartCount(){
     $c=0; foreach($_SESSION['cart'] as $r){ $c+=$r['qty']; } return $c;
 }
 function getCartItems(){ return isset($_SESSION['cart'])?array_values($_SESSION['cart']):[]; }
+function getCartItemsWithKeys(){ return isset($_SESSION['cart'])?$_SESSION['cart']:[]; }
 function cartTotal(){ $t=0; foreach(getCartItems() as $r){ $t+=$r['item']['price']*$r['qty']; } return $t; }
 function clearCart(){ if(isset($_SESSION['cart'])) unset($_SESSION['cart']); }
+function removeFromCart($key){
+    if(isset($_SESSION['cart'][$key])) {
+        unset($_SESSION['cart'][$key]);
+    }
+}
 function createOrder($name,$email){
     require __DIR__ . '/../database.php';
     $items = getCartItems();
@@ -173,8 +181,15 @@ function getDashboardStats(){
 function getRecentOrders($limit=20){
     require __DIR__ . '/../database.php';
     $out=[];
-    $res=$conn->query("SELECT id,customer_name,customer_email,total,created_at FROM orders ORDER BY id DESC LIMIT ".intval($limit));
-    if($res){ while($r=$res->fetch_assoc()){ $out[]=$r; } }
+    $limit = intval($limit); // Ensure it's an integer
+    $stmt = $conn->prepare("SELECT id,customer_name,customer_email,total,created_at FROM orders ORDER BY id DESC LIMIT ?");
+    $stmt->bind_param("i", $limit);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while($r = $res->fetch_assoc()){ 
+        $out[] = $r; 
+    }
+    $stmt->close();
     return $out;
 }
 

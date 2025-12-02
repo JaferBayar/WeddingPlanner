@@ -30,7 +30,7 @@ function getSplash(){
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         html{scroll-behavior:smooth}
-        body{font-family:<?=$isRTL ? '"Tajawal", "Cormorant Garamond", sans-serif' : '"Cormorant Garamond", serif'?>;color:#2d2d2d;overflow-x:hidden}
+        body{font-family:<?=$isRTL ? '"Tajawal", "Cormorant Garamond", sans-serif' : '"Cormorant Garamond", serif'?>;color:#2d2d2d;overflow-x:hidden;background:<?=$theme === 'bride' ? '#ffe6f2' : '#e8f0ff'?>}
         
         /* RTL Support */
         <?php if($isRTL): ?>
@@ -327,7 +327,7 @@ function getHeader($isGuest=false){
 <?php endif; ?>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:<?=$isRTL ? '"Tajawal", sans-serif' : '"Cormorant Garamond", serif'?>;background:#fafafa;<?=$isRTL ? 'direction:rtl;text-align:right;' : ''?>}
+body{font-family:<?=$isRTL ? '"Tajawal", sans-serif' : '"Cormorant Garamond", serif'?>;background:<?=$theme === 'bride' ? '#ffe6f2' : '#e8f0ff'?>;<?=$isRTL ? 'direction:rtl;text-align:right;' : ''?>}
 .wrap{min-height:100vh;display:flex;flex-direction:column}
 .top{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);box-shadow:0 2px 20px rgba(0,0,0,0.06);position:fixed;top:0;left:0;right:0;z-index:100}
 .brand{font-weight:400;font-size:26px;font-family:"Great Vibes",cursive;color:<?=$accent?>;text-decoration:none}
@@ -460,15 +460,18 @@ function getBody($items,$isGuest=false){
         <div class="items-grid">
             <?php foreach($rows as $it): ?>
             <div class="item-card">
-                <div class="item-icon-wrap"><span class="item-icon"><?=$it['icon']?></span></div>
-                <h4 class="item-title"><?=$it['title']?></h4>
+                <div class="item-icon-wrap"><span class="item-icon"><?=htmlspecialchars($it['icon'])?></span></div>
+                <h4 class="item-title"><?=htmlspecialchars($it['title'])?></h4>
+                <?php if(!empty($it['description'])): ?>
+                <p class="item-description"><?=htmlspecialchars($it['description'])?></p>
+                <?php endif; ?>
                 <div class="item-meta">
-                    <span class="item-category"><?=$it['category']?></span>
-                    <span class="item-price"><?=$it['price']?> $</span>
+                    <span class="item-category"><?=htmlspecialchars($it['category'])?></span>
+                    <span class="item-price"><?=htmlspecialchars($it['price'])?> $</span>
                 </div>
                 <form method="post" action="index.php">
                     <input type="hidden" name="action" value="add_to_cart">
-                    <input type="hidden" name="item_id" value="<?=$it['id']?>">
+                    <input type="hidden" name="item_id" value="<?=intval($it['id'])?>">
                     <button class="item-btn" type="submit"><?=t('add_to_cart')?></button>
                 </form>
             </div>
@@ -491,20 +494,18 @@ function getBody($items,$isGuest=false){
             <?php $bi = 0; foreach($bundles as $bundle): $bImg = $bundleImages[$bi % 3]; ?>
             <div class="bundle-card">
                 <div class="bundle-image">
-                    <img src="<?=$bImg['local']?>" onerror="this.onerror=null; this.src='<?=$bImg['online']?>';" alt="<?=$bundle['title']?>">
+                    <img src="<?=$bImg['local']?>" onerror="this.onerror=null; this.src='<?=$bImg['online']?>';" alt="<?=htmlspecialchars($bundle['title'])?>">
                     <div class="bundle-badge"><?=$isRTL ? 'باقة' : 'Bundle'?></div>
-                    <div class="bundle-price-tag"><?=$bundle['price']?> $</div>
+                    <div class="bundle-price-tag"><?=htmlspecialchars($bundle['price'])?> $</div>
                 </div>
                 <div class="bundle-info">
-                    <h3 class="bundle-title"><?=$bundle['title']?></h3>
-                    <ul class="bundle-features">
-                        <li><?=$isRTL ? 'قاعة فاخرة مع خدمات VIP' : 'Premium hall with VIP services'?></li>
-                        <li><?=$isRTL ? 'قائمة طعام كاملة' : 'Full catering menu'?></li>
-                        <li><?=$isRTL ? 'ديكور وتنسيق زهور' : 'Decoration and florals'?></li>
-                    </ul>
+                    <h3 class="bundle-title"><?=htmlspecialchars($bundle['title'])?></h3>
+                    <?php if(!empty($bundle['description'])): ?>
+                    <p class="bundle-description"><?=htmlspecialchars($bundle['description'])?></p>
+                    <?php endif; ?>
                     <form method="post" action="index.php">
                         <input type="hidden" name="action" value="add_bundle_to_cart">
-                        <input type="hidden" name="bundle_id" value="<?=$bundle['id']?>">
+                        <input type="hidden" name="bundle_id" value="<?=intval($bundle['id'])?>">
                         <button class="bundle-btn" type="submit"><?=t('add_bundle')?></button>
                     </form>
                 </div>
@@ -520,14 +521,19 @@ function getBody($items,$isGuest=false){
         <button class="cart-close" id="closeCart">✕</button>
     </div>
     <div class="cart-items">
-        <?php foreach(getCartItems() as $row): ?>
+        <?php foreach(getCartItemsWithKeys() as $key => $row): ?>
         <div class="cart-item">
-            <div class="cart-item-icon"><?=$row['item']['icon']?></div>
+            <div class="cart-item-icon"><?=htmlspecialchars($row['item']['icon'])?></div>
             <div class="cart-item-info">
-                <div class="cart-item-name"><?=$row['item']['title']?></div>
-                <div class="cart-item-qty"><?=t('qty')?>: <?=$row['qty']?></div>
+                <div class="cart-item-name"><?=htmlspecialchars($row['item']['title'])?></div>
+                <div class="cart-item-qty"><?=t('qty')?>: <?=intval($row['qty'])?></div>
             </div>
-            <div class="cart-item-price"><?=$row['item']['price']*$row['qty']?> $</div>
+            <div class="cart-item-price"><?=number_format($row['item']['price']*$row['qty'], 2)?> $</div>
+            <form method="post" action="index.php" style="margin:0">
+                <input type="hidden" name="action" value="remove_from_cart">
+                <input type="hidden" name="cart_key" value="<?=htmlspecialchars($key)?>">
+                <button type="submit" class="cart-item-delete" title="<?=$isRTL ? 'حذف' : 'Remove'?>">🗑️</button>
+            </form>
         </div>
         <?php endforeach; ?>
         <?php if(!count(getCartItems())): ?>
@@ -595,6 +601,7 @@ function getBody($items,$isGuest=false){
 .item-icon-wrap{width:60px;height:60px;background:<?=$accentLight?>;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
 .item-icon{font-size:28px}
 .item-title{font-family:"Playfair Display",serif;font-size:18px;margin:0 0 10px;color:#333}
+.item-description{font-size:13px;color:#666;line-height:1.5;margin-bottom:12px;min-height:40px}
 .item-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .item-category{font-size:11px;padding:4px 10px;background:#f5f5f5;border-radius:999px;color:#666}
 .item-price{font-size:18px;font-weight:700;color:<?=$accent?>}
@@ -613,6 +620,7 @@ function getBody($items,$isGuest=false){
 .bundle-price-tag{position:absolute;bottom:14px;<?=$isRTL?'left':'right'?>:14px;padding:8px 16px;background:#fff;border-radius:999px;font-size:18px;font-weight:700;color:<?=$accent?>;box-shadow:0 4px 15px rgba(0,0,0,0.15)}
 .bundle-info{padding:20px}
 .bundle-title{font-family:"Playfair Display",serif;font-size:20px;margin:0 0 14px}
+.bundle-description{font-size:14px;color:#666;line-height:1.6;margin-bottom:18px}
 .bundle-features{list-style:none;padding:0;margin:0 0 16px}
 .bundle-features li{padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:13px;display:flex;align-items:center;gap:8px}
 .bundle-features li::before{content:'✓';color:<?=$accent?>;font-weight:bold}
@@ -634,7 +642,9 @@ function getBody($items,$isGuest=false){
 .cart-item-info{flex:1}
 .cart-item-name{font-weight:600;margin-bottom:2px;font-size:14px}
 .cart-item-qty{font-size:12px;opacity:0.6}
-.cart-item-price{font-weight:700;color:<?=$accent?>;font-size:16px}
+.cart-item-price{font-weight:700;color:<?=$accent?>;font-size:16px;margin-<?=$isRTL?'left':'right'?>:8px}
+.cart-item-delete{border:none;background:transparent;cursor:pointer;font-size:18px;padding:8px;border-radius:8px;transition:all 0.2s;opacity:0.5}
+.cart-item-delete:hover{opacity:1;background:rgba(255,0,0,0.1);transform:scale(1.1)}
 .cart-empty{text-align:center;padding:50px 20px;opacity:0.5}
 .cart-empty-icon{font-size:40px;margin-bottom:10px}
 .cart-footer{padding:20px;border-top:1px solid #f0f0f0;background:#fafafa}
@@ -959,20 +969,27 @@ return ob_get_clean();
 function getMyOrdersPage($orders){
 $btn = palette_btn_bg();
 $hdr = palette_header_bg();
-$accent = theme_class() === 'bride' ? '#d4849a' : '#6b7fd4';
+$theme = theme_class();
+$accent = $theme === 'bride' ? '#d4849a' : '#6b7fd4';
+$dir = getDir();
+$isRTL = isRTL();
+$lang = getCurrentLang();
 ob_start();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?=$lang?>" dir="<?=$dir?>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Orders - Wedding Planner</title>
+<title><?=t('my_orders')?> - <?=t('site_name')?></title>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+<?php if($isRTL): ?>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<?php endif; ?>
 <style>
-body{margin:0;font-family:"Cormorant Garamond",serif;background:linear-gradient(135deg,#fff7fb,#f3f5ff);min-height:100vh}
+body{margin:0;font-family:<?=$isRTL ? '"Tajawal", sans-serif' : '"Cormorant Garamond", serif'?>;background:<?=$theme === 'bride' ? '#ffe6f2' : '#e8f0ff'?>;min-height:100vh;<?=$isRTL ? 'direction:rtl;text-align:right;' : ''?>}
 .top{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:<?=$hdr?>;backdrop-filter:blur(10px);box-shadow:0 10px 25px rgba(0,0,0,.08);position:sticky;top:0;z-index:50}
-.brand{font-weight:400;font-size:28px;font-family:"Great Vibes",cursive;color:#b27a9c;letter-spacing:.04em;text-decoration:none}
+.brand{font-weight:400;font-size:28px;font-family:"Great Vibes",cursive;color:<?=$accent?>;letter-spacing:.04em;text-decoration:none}
 .btn{border:none;padding:10px 16px;border-radius:999px;cursor:pointer;background:<?=$btn?>;color:#fff;font-weight:600;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,.12);text-decoration:none;display:inline-block}
 .btn:hover{opacity:.92;transform:translateY(-1px)}
 .container{max-width:1000px;margin:0 auto;padding:40px 24px}
@@ -999,16 +1016,16 @@ body{margin:0;font-family:"Cormorant Garamond",serif;background:linear-gradient(
 </head>
 <body>
 <div class="top">
-    <a href="index.php" class="brand">Wedding Planner</a>
+    <a href="index.php" class="brand"><?=t('site_name')?></a>
     <div style="display:flex;gap:10px;align-items:center">
-        <a class="btn" href="index.php">Home</a>
-        <a class="btn" href="logout.php">Logout</a>
+        <a class="btn" href="index.php"><?=t('home')?></a>
+        <a class="btn" href="logout.php"><?=t('logout')?></a>
     </div>
 </div>
 
 <div class="container">
-    <h1 class="page-title">My Orders</h1>
-    <p class="page-subtitle">View your order history and details</p>
+    <h1 class="page-title"><?=t('my_orders')?></h1>
+    <p class="page-subtitle"><?=t('order_history')?></p>
     
     <?php if(count($orders) > 0): ?>
     <div class="orders-list">
@@ -1016,11 +1033,11 @@ body{margin:0;font-family:"Cormorant Garamond",serif;background:linear-gradient(
         <div class="order-card">
             <div class="order-header">
                 <div>
-                    <div class="order-id">Order #<?=$order['id']?></div>
+                    <div class="order-id"><?=t('order')?> #<?=$order['id']?></div>
                     <div class="order-date"><?=date('F j, Y \a\t g:i A', strtotime($order['created_at']))?></div>
                 </div>
                 <div style="display:flex;align-items:center;gap:16px">
-                    <span class="status-badge">Completed</span>
+                    <span class="status-badge"><?=t('completed')?></span>
                     <div class="order-total"><?=number_format($order['total'],2)?> $</div>
                 </div>
             </div>
@@ -1032,7 +1049,7 @@ body{margin:0;font-family:"Cormorant Garamond",serif;background:linear-gradient(
                 <div class="order-item">
                     <div>
                         <div class="item-name"><?=htmlspecialchars($item['item_title'])?></div>
-                        <div class="item-details">Qty: <?=$item['qty']?> × <?=number_format($item['item_price'],2)?> $</div>
+                        <div class="item-details"><?=t('qty')?>: <?=$item['qty']?> × <?=number_format($item['item_price'],2)?> $</div>
                     </div>
                     <div class="item-price"><?=number_format($item['item_price'] * $item['qty'],2)?> $</div>
                 </div>
@@ -1044,9 +1061,9 @@ body{margin:0;font-family:"Cormorant Garamond",serif;background:linear-gradient(
     <?php else: ?>
     <div class="empty-state">
         <div class="empty-icon">📦</div>
-        <h2 class="empty-title">No orders yet</h2>
-        <p class="empty-text">You haven't placed any orders yet. Start planning your perfect wedding!</p>
-        <a href="index.php" class="btn">Browse Services</a>
+        <h2 class="empty-title"><?=t('no_orders')?></h2>
+        <p class="empty-text"><?=t('no_orders_desc')?></p>
+        <a href="index.php" class="btn"><?=t('browse_services')?></a>
     </div>
     <?php endif; ?>
 </div>
@@ -1162,6 +1179,11 @@ body{margin:0;font-family:"Cormorant Garamond",serif;background:linear-gradient(
                         <option value="Print" <?=($editItem && $editItem['category']==='Print')?'selected':''?>>Print</option>
                         <option value="Bundle" <?=($editItem && $editItem['category']==='Bundle')?'selected':''?>>Bundle</option>
                     </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-input" rows="3" placeholder="e.g. Professional photography for 8 hours with 2 photographers"><?=$editItem ? htmlspecialchars($editItem['description']) : ''?></textarea>
                 </div>
                 
                 <div class="form-group">

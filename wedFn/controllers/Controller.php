@@ -21,6 +21,13 @@ class Controller {
                 header('Location: index.php');
                 exit();
             }
+            if(isset($_POST['action']) && $_POST['action']==='remove_from_cart' && isset($_POST['cart_key'])){
+                // Sanitize cart_key - should only contain alphanumeric characters
+                $cartKey = preg_replace('/[^a-zA-Z0-9]/', '', $_POST['cart_key']);
+                removeFromCart($cartKey);
+                header('Location: index.php');
+                exit();
+            }
             if(isset($_POST['action']) && $_POST['action']==='place_order'){
                 // Block guests from placing orders
                 if(isGuest()){
